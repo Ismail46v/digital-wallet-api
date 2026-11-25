@@ -1,0 +1,10 @@
+* text=auto eol=lf
+
+# Windows scripts must keep CRLF
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Unix wrapper script must keep LF so it runs on Linux/macOS
+mvnw text eol=lf
+
+*.jar binary

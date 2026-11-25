@@ -1,0 +1,41 @@
+# IMPORTANT: this file SHADOWS src/main/resources/application.yml during tests
+# (Spring Boot loads only the first classpath:application.yml it finds, and test-classes come first).
+# Keep the JPA / Flyway keys below in sync with the main file.
+# ApplicationSmokeIntegrationTest asserts the effective values, so drift fails the build.
+#
+# The datasource url/username/password come from Testcontainers via @DynamicPropertySource.
+spring:
+  application:
+    name: digital-wallet-test
+
+  datasource:
+    hikari:
+      # Real 20-thread contention in the concurrency tests without waiting on the pool.
+      maximum-pool-size: 25
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        query:
+          fail_on_pagination_over_collection_fetch: true
+        # Used by the history test to prove the query count does not grow with the page size (no N+1).
+        generate_statistics: true
+
+  flyway:
+    enabled: true
+
+  data:
+    web:
+      pageable:
+        max-page-size: 100
+
+logging:
+  level:
+    org.hibernate.engine.internal.StatisticalLoggingSessionEventListener: WARN
+    org.testcontainers: INFO
+    com.github.dockerjava: WARN

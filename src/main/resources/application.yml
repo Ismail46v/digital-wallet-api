@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: digital-wallet
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:wallet_db}
+    username: ${DB_USER:wallet}
+    password: ${DB_PASSWORD:wallet}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        query:
+          # Turns HHH90003004 (in-memory pagination over a collection fetch) into a hard error.
+          fail_on_pagination_over_collection_fetch: true
+
+  flyway:
+    enabled: true
+
+  data:
+    web:
+      pageable:
+        max-page-size: 100
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
